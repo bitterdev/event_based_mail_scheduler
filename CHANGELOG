@@ -1,0 +1,11 @@
+add task
+    - if enabled
+        - check time
+            - clone campaign
+            - add campaign to send list
+            - disable task
+translate package
+
+Version 0.0.1
+==================================================
+- First version

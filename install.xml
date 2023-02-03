@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<concrete5-cif version="1.0">
+    <singlepages>
+        <page name="Scheduled Emails" path="/dashboard/simple_newsletter/scheduled_emails"
+              filename="/dashboard/simple_newsletter/scheduled_emails.php" package="event_based_mail_scheduler"/>
+    </singlepages>
+</concrete5-cif>

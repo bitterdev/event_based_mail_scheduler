@@ -1,0 +1,62 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: event_based_mail_scheduler 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-03T21:04:01+01:00\n"
+"PO-Revision-Date: 2023-02-03 21:05+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: packages/event_based_mail_scheduler/install.xml:5
+msgid "Scheduled Emails"
+msgstr "Geplante E-Mails"
+
+#: packages/event_based_mail_scheduler/controller.php:31
+msgid "Send out email campaigns with Simple Newsletter add-on based on given Concrete CMS events."
+msgstr "Versenden Sie E-Mail-Kampagnen mit dem Add-on Simple Newsletter basierend auf bestimmten Concrete CMS-Ereignissen."
+
+#: packages/event_based_mail_scheduler/controller.php:36
+msgid "Event-based Mail Scheduler"
+msgstr "Ereignisbasierter E-Mail-Planer"
+
+#: packages/event_based_mail_scheduler/single_pages/dashboard/simple_newsletter/scheduled_emails.php:36
+msgid "Page Types"
+msgstr "Seiten Typen"
+
+#: packages/event_based_mail_scheduler/single_pages/dashboard/simple_newsletter/scheduled_emails.php:41
+msgid "Events"
+msgstr "Ereignisse"
+
+#: packages/event_based_mail_scheduler/single_pages/dashboard/simple_newsletter/scheduled_emails.php:46
+msgid "Master Campaign"
+msgstr "Master-Kampagne"
+
+#: packages/event_based_mail_scheduler/single_pages/dashboard/simple_newsletter/scheduled_emails.php:51
+msgid "Time"
+msgstr "Uhrzeit"
+
+#: packages/event_based_mail_scheduler/single_pages/dashboard/simple_newsletter/scheduled_emails.php:59
+msgid "Save"
+msgstr "Speichern"
+
+#: packages/event_based_mail_scheduler/controllers/single_page/dashboard/simple_newsletter/scheduled_emails.php:55
+msgid "The settings has been updated successfully."
+msgstr "Die Einstellungen wurden erfolgreich aktualisiert."
+
+#: packages/event_based_mail_scheduler/src/Bitter/EventBasedMailScheduler/Config.php:58
+msgid "Add Page"
+msgstr "Seite hinzufügen"
+
+#: packages/event_based_mail_scheduler/src/Bitter/EventBasedMailScheduler/Config.php:59
+msgid "Duplicate Page"
+msgstr "Seite duplizieren"
+
+#: packages/event_based_mail_scheduler/src/Bitter/EventBasedMailScheduler/Config.php:60
+msgid "Update Page"
+msgstr "Seite aktualisieren"
