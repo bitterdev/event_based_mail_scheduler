@@ -11,13 +11,12 @@
 namespace Concrete\Package\EventBasedMailScheduler;
 
 use Bitter\EventBasedMailScheduler\Console\Command\ScanChanges;
-use Bitter\EventBasedMailScheduler\Provider\ServiceProvider;
 use Concrete\Core\Package\Package;
 
 class Controller extends Package
 {
     protected $pkgHandle = 'event_based_mail_scheduler';
-    protected $pkgVersion = '0.0.1';
+    protected $pkgVersion = '0.0.3';
     protected $appVersionRequired = '9.0.0';
     protected $pkgAutoloaderRegistries = [
         'src/Bitter/EventBasedMailScheduler' => 'Bitter\EventBasedMailScheduler',
@@ -42,18 +41,11 @@ class Controller extends Package
             $console = $this->app->make('console');
             $console->add(new ScanChanges());
         }
-
-        /** @var ServiceProvider $serviceProvider */
-        $serviceProvider = $this->app->make(ServiceProvider::class);
-        $serviceProvider->register();
     }
 
     public function install()
     {
         parent::install();
-        /** @var ServiceProvider $serviceProvider */
-        $serviceProvider = $this->app->make(ServiceProvider::class);
-        $serviceProvider->register();
         $this->installContentFile('install.xml');
     }
 

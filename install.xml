@@ -1,5 +1,26 @@
 <?xml version="1.0"?>
 <concrete5-cif version="1.0">
+    <attributekeys>
+        <attributekey handle="newsletter_scheduled" name="Schedule Newsletter" package="event_based_mail_scheduler"
+                      searchable="1" indexed="0"
+                      type="boolean"
+                      internal="1" category="collection">
+            <type mode=""/>
+        </attributekey>
+        <attributekey handle="newsletter_scheduled_at" name="Newsletter Scheduled At"
+                      package="event_based_mail_scheduler" searchable="1"
+                      indexed="0"
+                      type="date_time" category="collection">
+            <type mode=""/>
+        </attributekey>
+    </attributekeys>
+    <attributesets>
+        <attributeset handle="newsletter" name="Newsletter" package="event_based_mail_scheduler" locked="0"
+                      category="collection">
+            <attributekey handle="newsletter_scheduled"/>
+            <attributekey handle="newsletter_scheduled_at"/>
+        </attributeset>
+    </attributesets>
     <singlepages>
         <page name="Scheduled Emails" path="/dashboard/simple_newsletter/scheduled_emails"
               filename="/dashboard/simple_newsletter/scheduled_emails.php" package="event_based_mail_scheduler"/>

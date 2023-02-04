@@ -13,9 +13,13 @@ namespace Bitter\EventBasedMailScheduler\Console\Command;
 use Bitter\EventBasedMailScheduler\Config;
 use Bitter\SimpleNewsletter\Entity\Campaign;
 use Bitter\SimpleNewsletter\Enumeration\CampaignState;
+use Concrete\Core\Localization\Service\Date;
+use Concrete\Core\Page\Page;
+use Concrete\Core\Page\PageList;
 use Concrete\Core\Support\Facade\Application;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -29,53 +33,71 @@ class ScanChanges extends Command
             ->setDescription('Scan for changes.');
     }
 
+    /** @noinspection PhpUnhandledExceptionInspection */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $app = Application::getFacadeApplication();
         /** @var Config $config */
         $config = $app->make(Config::class);
+        /** @var PageList $pageList */
+        $pageList = $app->make(PageList::class);
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $app->make(EntityManagerInterface::class);
+        /** @var Date $dateHelper */
+        $dateHelper = $app->make(Date::class);
 
         $io = new SymfonyStyle($input, $output);
 
-        if ($config->isEnabled()) {
-            $io->info("Enabled.");
+        $now = new \DateTime();
 
-            $now = new \DateTime();
+        $pageList->ignorePermissions();
 
-            $scheduledAt = clone $now;
-            list($hour, $minute) = explode(":", $config->getTime());
-            $scheduledAt->setTime((int)$hour, (int)$minute);
+        $pages = $pageList->getResults();
 
-            if ($now->getTimestamp() >= $scheduledAt->getTimestamp()) {
-                $io->info("Time reached.");
+        $rows = [];
 
-                $masterCampaign = $entityManager->getRepository(Campaign::class)->findOneBy(["id" => $config->getSelectedCampaign()]);
+        foreach ($pages as $page) {
 
-                if ($masterCampaign instanceof Campaign) {
-                    $duplicatedCampaign = new Campaign();
-                    $duplicatedCampaign->setBody($masterCampaign->getBody());
-                    $duplicatedCampaign->setCreatedAt($now);
-                    $duplicatedCampaign->setMailingList($masterCampaign->getMailingList());
-                    $duplicatedCampaign->setName($masterCampaign->getName());
-                    $duplicatedCampaign->setSubject($masterCampaign->getSubject());
-                    $duplicatedCampaign->setState(CampaignState::QUEUED);
+            if ($page instanceof Page) {
+                $isScheduled = (bool)$page->getAttribute("newsletter_scheduled");
+                $scheduledAt = $page->getAttribute("newsletter_scheduled_at");
 
-                    $entityManager->persist($duplicatedCampaign);
-                    $entityManager->flush();
+                if ($isScheduled && $scheduledAt instanceof \DateTime) {
+                    if ($now->getTimestamp() >= $scheduledAt->getTimestamp()) {
+                        $masterCampaign = $entityManager->getRepository(Campaign::class)->findOneBy(["id" => $config->getSelectedCampaign()]);
 
-                    $config->setIsEnabled(false);
+                        if ($masterCampaign instanceof Campaign) {
+                            $duplicatedCampaign = new Campaign();
+                            $duplicatedCampaign->setBody($masterCampaign->getBody());
+                            $duplicatedCampaign->setCreatedAt($now);
+                            $duplicatedCampaign->setMailingList($masterCampaign->getMailingList());
+                            $duplicatedCampaign->setName($masterCampaign->getName());
+                            $duplicatedCampaign->setSubject($masterCampaign->getSubject());
+                            $duplicatedCampaign->setState(CampaignState::QUEUED);
 
-                    $io->success("Duplicated campaign and add to queue.");
+                            $entityManager->persist($duplicatedCampaign);
+                            $entityManager->flush();
+
+                            $page->setAttribute("newsletter_scheduled", false);
+                        }
+                    }
+
+                    $rows[] = [
+                        $page->getCollectionName(),
+                        $page->getCollectionID(),
+                        $dateHelper->formatDateTime($scheduledAt),
+                        $page->getAttribute("newsletter_scheduled") ? "No" : "Yes"
+                    ];
                 }
-            } else {
-                $io->info("Time not reached.");
-
             }
-        } else {
-            $io->info("Not enabled.");
         }
+
+        $table = new Table($output);
+        $table
+            ->setHeaders(['Page', 'CID', 'Newsletter Scheduled At', 'Processed'])
+            ->setRows($rows)
+        ;
+        $table->render();
 
         return static::SUCCESS;
     }

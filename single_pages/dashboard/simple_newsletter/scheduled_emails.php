@@ -14,12 +14,7 @@ use Concrete\Core\Form\Service\Form;
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\Validation\CSRF\Token;
 
-/** @var string $time */
-/** @var array $events */
-/** @var array $pageTypes */
 /** @var array $campaigns */
-/** @var array $selectedPageTypes */
-/** @var array $selectedEvents */
 /** @var string $selectedCampaign */
 
 $app = Application::getFacadeApplication();
@@ -33,24 +28,8 @@ $token = $app->make(Token::class);
     <?php echo $token->output("update_settings"); ?>
 
     <div class="form-group">
-        <?php echo $form->label("selectedPageTypes", t('Page Types')); ?>
-        <?php echo $form->selectMultiple("selectedPageTypes", $pageTypes, $selectedPageTypes); ?>
-    </div>
-
-    <div class="form-group">
-        <?php echo $form->label("selectedEvents", t('Events')); ?>
-        <?php echo $form->selectMultiple("selectedEvents", $events, $selectedEvents); ?>
-    </div>
-
-    <div class="form-group">
         <?php echo $form->label("selectedCampaign", t('Master Campaign')); ?>
         <?php echo $form->select("selectedCampaign", $campaigns, $selectedCampaign); ?>
-    </div>
-
-    <div class="form-group">
-        <?php echo $form->label("time", t('Time')); ?>
-        <!--suppress HtmlFormInputWithoutLabel -->
-        <input type="time" id="time" name="time" value="<?php echo h($time); ?>">
     </div>
 
     <div class="ccm-dashboard-form-actions-wrapper">

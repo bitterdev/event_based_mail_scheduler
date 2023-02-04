@@ -47,21 +47,13 @@ class ScheduledEmails extends DashboardPageController
             }
 
             if (!$this->error->has()) {
-                $this->config->setSelectedPageTypes((array)$this->request->request->get("selectedPageTypes"));
-                $this->config->setSelectedEvents((array)$this->request->request->get("selectedEvents"));
                 $this->config->setSelectedCampaign((string)$this->request->request->get("selectedCampaign"));
-                $this->config->setTime($this->request->request->get("time"));
 
                 $this->set('success', t("The settings has been updated successfully."));
             }
         }
 
-        $this->set('selectedPageTypes', $this->config->getSelectedPageTypes());
-        $this->set('selectedEvents', $this->config->getSelectedEvents());
         $this->set('selectedCampaign', $this->config->getSelectedCampaign());
-        $this->set('time', $this->config->getTime());
-        $this->set('pageTypes', $this->config->getPageTypes());
-        $this->set('events', $this->config->getEvents());
         $this->set('campaigns', $this->config->getCampaigns());
     }
 
