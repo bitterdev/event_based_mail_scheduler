@@ -39,24 +39,19 @@ class ScanChanges extends Command
         $app = Application::getFacadeApplication();
         /** @var Config $config */
         $config = $app->make(Config::class);
-        /** @var PageList $pageList */
-        $pageList = $app->make(PageList::class);
         /** @var EntityManagerInterface $entityManager */
         $entityManager = $app->make(EntityManagerInterface::class);
         /** @var Date $dateHelper */
         $dateHelper = $app->make(Date::class);
 
-        $io = new SymfonyStyle($input, $output);
-
         $now = new \DateTime();
 
-        $pageList->ignorePermissions();
+        /** @noinspection PhpDeprecationInspection */
+        $rows = $entityManager->getConnection()->fetchAll("SELECT cID FROM Pages");
 
-        $pages = $pageList->getResults();
+        foreach ($rows as $row) {
 
-        $rows = [];
-
-        foreach ($pages as $page) {
+            $page = Page::getByID($row["cID"]);
 
             if ($page instanceof Page) {
                 $isScheduled = (bool)$page->getAttribute("newsletter_scheduled");
@@ -80,14 +75,14 @@ class ScanChanges extends Command
 
                             $page->setAttribute("newsletter_scheduled", false);
                         }
-                    }
 
-                    $rows[] = [
-                        $page->getCollectionName(),
-                        $page->getCollectionID(),
-                        $dateHelper->formatDateTime($scheduledAt),
-                        $page->getAttribute("newsletter_scheduled") ? "No" : "Yes"
-                    ];
+                        $rows[] = [
+                            $page->getCollectionName(),
+                            $page->getCollectionID(),
+                            $dateHelper->formatDateTime($scheduledAt),
+                            $page->getAttribute("newsletter_scheduled") ? "No" : "Yes"
+                        ];
+                    }
                 }
             }
         }
